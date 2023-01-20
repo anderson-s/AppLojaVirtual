@@ -1,3 +1,5 @@
+import 'package:app_loja_virtual/models/utils/routes.dart';
+import 'package:app_loja_virtual/views/product_detail.dart';
 import 'package:app_loja_virtual/views/products_overview.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +16,6 @@ class MyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final tema = ThemeData();
     return MaterialApp(
-      home: const ProductsOverView(),
       debugShowCheckedModeBanner: false,
       theme: tema.copyWith(
         colorScheme: tema.colorScheme.copyWith(
@@ -29,15 +30,11 @@ class MyWidget extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        // textTheme: tema.textTheme.copyWith(
-        //   headline6: const TextStyle(
-        //     fontFamily: "Anton",
-        //     fontSize: 18,
-        //     color: Colors.white,
-        //     fontWeight: FontWeight.bold,
-        //   ),
-        // ),
       ),
+      routes: {
+        Routes.home: (context) => const ProductsOverView(),
+        Routes.detail: (context) => const ProductDetail(),
+      },
     );
   }
 }
