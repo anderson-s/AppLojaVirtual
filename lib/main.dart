@@ -16,7 +16,28 @@ class MyWidget extends StatelessWidget {
     return MaterialApp(
       home: const ProductsOverView(),
       debugShowCheckedModeBanner: false,
-      theme: tema.copyWith(),
+      theme: tema.copyWith(
+        colorScheme: tema.colorScheme.copyWith(
+          primary: Colors.purple,
+          secondary: Colors.deepOrange,
+        ),
+        appBarTheme: tema.appBarTheme.copyWith(
+          titleTextStyle: const TextStyle(
+            fontFamily: "Lato",
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        // textTheme: tema.textTheme.copyWith(
+        //   headline6: const TextStyle(
+        //     fontFamily: "Anton",
+        //     fontSize: 18,
+        //     color: Colors.white,
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        // ),
+      ),
     );
   }
 }
