@@ -1,7 +1,9 @@
+import 'package:app_loja_virtual/controller/controller.dart';
 import 'package:app_loja_virtual/models/data/products_data.dart';
 import 'package:app_loja_virtual/models/product.dart';
 import 'package:app_loja_virtual/views/components/product_item.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductsOverView extends StatefulWidget {
   const ProductsOverView({super.key});
@@ -11,9 +13,10 @@ class ProductsOverView extends StatefulWidget {
 }
 
 class _ProductsOverViewState extends State<ProductsOverView> {
-  final List<Product> loadProducts = productsList;
   @override
   Widget build(BuildContext context) {
+    final List<Product> loadProducts =
+        Provider.of<Controller>(context, listen: false).returnProducts;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Minha Loja"),
