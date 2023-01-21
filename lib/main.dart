@@ -22,7 +22,7 @@ class MyWidget extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => Controller(),
-        )
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
