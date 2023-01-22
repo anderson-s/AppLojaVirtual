@@ -14,13 +14,18 @@ class ProductItem extends StatelessWidget {
       child: GridTile(
         footer: GridTileBar(
           backgroundColor: Colors.black54,
-          leading: IconButton(
-            onPressed: () {
-              product.togleIsFavorite();
+          leading: Consumer<Product>(
+            builder: (ctx, value, _) {
+              return IconButton(
+                onPressed: () {
+                  product.togleIsFavorite();
+                },
+                icon: Icon(product.isFavorite
+                    ? Icons.favorite
+                    : Icons.favorite_border),
+                color: Theme.of(context).colorScheme.secondary,
+              );
             },
-            icon: Icon(
-                product.isFavorite ? Icons.favorite : Icons.favorite_border),
-            color: Theme.of(context).colorScheme.secondary,
           ),
           trailing: IconButton(
             onPressed: () {},
