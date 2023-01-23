@@ -43,7 +43,6 @@ class Product with ChangeNotifier {
 
   void togleIsFavorite() {
     isFavorite = !isFavorite;
-
     notifyListeners();
   }
 }

@@ -1,4 +1,4 @@
-import 'package:app_loja_virtual/controller/controller.dart';
+import 'package:app_loja_virtual/controller/controller_product.dart';
 import 'package:app_loja_virtual/models/product.dart';
 import 'package:app_loja_virtual/views/components/product_item.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ class ProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<Controller>(context, listen: false);
+    final provider = Provider.of<ControllerProduct>(context, listen: false);
     final List<Product> loadProducts = optionFilters
         ? provider.returnProducts
             .where((element) => element.isFavorite)

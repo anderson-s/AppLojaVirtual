@@ -27,7 +27,9 @@ class ProductItem extends StatelessWidget {
               );
             },
           ),
-          trailing: IconButton(
+          trailing: 
+          
+          IconButton(
             onPressed: () {},
             icon: const Icon(Icons.shopping_cart),
             color: Theme.of(context).colorScheme.secondary,

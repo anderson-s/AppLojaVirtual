@@ -1,4 +1,5 @@
-import 'package:app_loja_virtual/controller/controller.dart';
+import 'package:app_loja_virtual/controller/controller_cart.dart';
+import 'package:app_loja_virtual/controller/controller_product.dart';
 import 'package:app_loja_virtual/models/utils/routes.dart';
 import 'package:app_loja_virtual/views/product_detail.dart';
 import 'package:app_loja_virtual/views/products_overview.dart';
@@ -21,8 +22,11 @@ class MyWidget extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => Controller(),
+          create: (_) => ControllerProduct(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => ControllerCart(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
