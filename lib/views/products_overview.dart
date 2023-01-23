@@ -1,5 +1,8 @@
+import 'package:app_loja_virtual/controller/controller_cart.dart';
+import 'package:app_loja_virtual/views/components/badge.dart';
 import 'package:app_loja_virtual/views/components/product_grid.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductsOverView extends StatefulWidget {
   const ProductsOverView({super.key});
@@ -36,7 +39,21 @@ class _ProductsOverViewState extends State<ProductsOverView> {
                 optionsFilters = value;
               });
             },
-          )
+          ),
+          Consumer<ControllerCart>(
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.shopping_cart,
+              ),
+            ),
+            builder: (ctx, value, child) {
+              return Badge(
+                value: value.countItems.toString(),
+                child: child!,
+              );
+            },
+          ),
         ],
       ),
       body: ProductGrid(optionFilters: optionsFilters),
