@@ -42,7 +42,9 @@ class _ProductsOverViewState extends State<ProductsOverView> {
           ),
           Consumer<ControllerCart>(
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, "/cart");
+              },
               icon: const Icon(
                 Icons.shopping_cart,
               ),
