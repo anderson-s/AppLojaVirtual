@@ -5,12 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProductGrid extends StatelessWidget {
-  const ProductGrid({super.key});
+  final bool optionFilters;
+  const ProductGrid({super.key, required this.optionFilters});
 
   @override
   Widget build(BuildContext context) {
-    final List<Product> loadProducts =
-        Provider.of<Controller>(context, listen: false).returnProducts;
+    final provider = Provider.of<Controller>(context, listen: false);
+    final List<Product> loadProducts = optionFilters
+        ? provider.returnProducts
+            .where((element) => element.isFavorite)
+            .toList()
+        : provider.returnProducts;
     return GridView.builder(
       padding: const EdgeInsets.all(10),
       itemCount: loadProducts.length,
