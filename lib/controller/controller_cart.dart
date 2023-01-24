@@ -11,8 +11,8 @@ class ControllerCart with ChangeNotifier {
     return {..._items};
   }
 
-  void removeItem(String productId) {
-    _items.remove(productId);
+  void removeItem(String id) {
+    _items.remove(id);
     notifyListeners();
   }
 
