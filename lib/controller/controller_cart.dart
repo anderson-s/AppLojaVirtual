@@ -5,9 +5,9 @@ import 'package:app_loja_virtual/models/product.dart';
 import 'package:flutter/material.dart';
 
 class ControllerCart with ChangeNotifier {
-  final Map<String, CartItem> _items = {};
+  final Map<String, Cart> _items = {};
 
-  Map<String, CartItem> get items {
+  Map<String, Cart> get items {
     return {..._items};
   }
 
@@ -32,7 +32,7 @@ class ControllerCart with ChangeNotifier {
     if (_items.containsKey(product.id)) {
       _items.update(
         product.id,
-        (value) => CartItem(
+        (value) => Cart(
           id: value.id,
           productId: value.productId,
           title: value.title,
@@ -43,7 +43,7 @@ class ControllerCart with ChangeNotifier {
     } else {
       _items.putIfAbsent(
         product.id,
-        () => CartItem(
+        () => Cart(
           id: Random().nextDouble().toString(),
           productId: product.id,
           title: product.title,
