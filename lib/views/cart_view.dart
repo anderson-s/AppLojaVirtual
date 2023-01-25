@@ -41,7 +41,7 @@ class CartView extends StatelessWidget {
                   Chip(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     label: Text(
-                      "R\$${cart.totalAmount}",
+                      "R\$${cart.totalAmount.toStringAsFixed(2)}",
                       style: TextStyle(
                         color:
                             Theme.of(context).primaryTextTheme.headline6?.color,
