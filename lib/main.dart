@@ -5,7 +5,9 @@ import 'package:app_loja_virtual/models/utils/routes.dart';
 import 'package:app_loja_virtual/views/cart_view.dart';
 import 'package:app_loja_virtual/views/orders_view.dart';
 import 'package:app_loja_virtual/views/product_detail.dart';
+import 'package:app_loja_virtual/views/product_page_form.dart';
 import 'package:app_loja_virtual/views/products_overview.dart';
+import 'package:app_loja_virtual/views/products_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,6 +57,8 @@ class MyWidget extends StatelessWidget {
           Routes.detail: (ctx) => const ProductDetail(),
           Routes.cart: (ctx) => const CartView(),
           Routes.orders:(context) => const OrdersView(),
+          Routes.productsPage:(context) => const ProductsPage(),
+          Routes.formProduct:(context) => const ProductPageForm()
         },
       ),
     );

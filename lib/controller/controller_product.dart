@@ -13,4 +13,6 @@ class ControllerProduct with ChangeNotifier {
     _products.add(product);
     notifyListeners();
   }
+
+  int get itemsCount => _products.length;
 }
