@@ -1,7 +1,7 @@
 import 'package:app_loja_virtual/controller/controller_cart.dart';
 import 'package:app_loja_virtual/views/components/app_drawer.dart';
 import 'package:app_loja_virtual/views/components/badge.dart';
-import 'package:app_loja_virtual/views/components/product_grid.dart';
+import 'package:app_loja_virtual/views/components/product_grid_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -60,7 +60,7 @@ class _ProductsOverViewState extends State<ProductsOverView> {
         ],
       ),
       drawer: const AppDrawer(),
-      body: ProductGrid(optionFilters: optionsFilters),
+      body: ProductGridItem(optionFilters: optionsFilters),
     );
   }
 }

@@ -4,9 +4,9 @@ import 'package:app_loja_virtual/views/components/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ProductGrid extends StatelessWidget {
+class ProductGridItem extends StatelessWidget {
   final bool optionFilters;
-  const ProductGrid({super.key, required this.optionFilters});
+  const ProductGridItem({super.key, required this.optionFilters});
 
   @override
   Widget build(BuildContext context) {

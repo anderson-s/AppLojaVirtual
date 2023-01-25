@@ -16,6 +16,27 @@ class ControllerCart with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeSingleItem(String productId) {
+    if (!_items.containsKey(productId)) {
+      return;
+    }
+    if (_items[productId]?.getQuantify == 1) {
+      _items.remove(productId);
+    } else {
+      _items.update(
+        productId,
+        (value) => Cart(
+          id: value.id,
+          productId: value.productId,
+          title: value.title,
+          quantify: value.quantify - 1,
+          price: value.price,
+        ),
+      );
+    }
+    notifyListeners();
+  }
+
   double get totalAmount {
     double valorTotal = 0.0;
     _items.forEach((key, value) {
