@@ -1,4 +1,5 @@
 import 'package:app_loja_virtual/controller/controller_cart.dart';
+import 'package:app_loja_virtual/controller/controller_order.dart';
 import 'package:app_loja_virtual/models/cart.dart';
 import 'package:app_loja_virtual/views/components/cart_items.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,11 @@ class CartView extends StatelessWidget {
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<ControllerOrder>(context, listen: false)
+                          .addOrder(cart);
+                      cart.clearCart();
+                    },
                     child: const Text(
                       "COMPRAR",
                     ),

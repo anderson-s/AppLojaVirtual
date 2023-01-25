@@ -1,4 +1,5 @@
 import 'package:app_loja_virtual/controller/controller_cart.dart';
+import 'package:app_loja_virtual/controller/controller_order.dart';
 import 'package:app_loja_virtual/controller/controller_product.dart';
 import 'package:app_loja_virtual/models/utils/routes.dart';
 import 'package:app_loja_virtual/views/cart_view.dart';
@@ -27,7 +28,10 @@ class MyWidget extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => ControllerCart(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ControllerOrder(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -48,7 +52,7 @@ class MyWidget extends StatelessWidget {
         routes: {
           Routes.home: (ctx) => const ProductsOverView(),
           Routes.detail: (ctx) => const ProductDetail(),
-          Routes.cart:(ctx) => const CartView(),
+          Routes.cart: (ctx) => const CartView(),
         },
       ),
     );
