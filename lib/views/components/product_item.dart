@@ -32,13 +32,16 @@ class ProductItem extends StatelessWidget {
           trailing: IconButton(
             onPressed: () {
               cart.addItem(product);
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   duration: const Duration(seconds: 1),
                   content: const Text("Adicionado com sucesso"),
-                  action: SnackBarAction(label: "DESFAZER", onPressed: () {
-                    cart.removeSingleItem(product.getId);
-                  }),
+                  action: SnackBarAction(
+                      label: "DESFAZER",
+                      onPressed: () {
+                        cart.removeSingleItem(product.getId);
+                      }),
                 ),
               );
             },
