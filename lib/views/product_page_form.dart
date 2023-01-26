@@ -1,9 +1,12 @@
 import 'dart:math';
 
+import 'package:app_loja_virtual/controller/controller_product.dart';
 import 'package:app_loja_virtual/models/product.dart';
+import 'package:app_loja_virtual/models/utils/routes.dart';
 import 'package:app_loja_virtual/models/utils/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class ProductPageForm extends StatefulWidget {
   const ProductPageForm({super.key});
@@ -44,13 +47,10 @@ class _ProductPageFormState extends State<ProductPageForm> {
       return;
     } else {
       _formKey.currentState?.save();
-      final newProduct = Product(
-        id: Random().nextDouble().toString(),
-        title: _formData["name"].toString(),
-        description: _formData["description"].toString(),
-        price: _formData["price"] as double,
-        imageUrl: _formData["urlImage"].toString(),
-      );
+
+      Provider.of<ControllerProduct>(context, listen: false)
+          .addProductFromData(_formData);
+      Navigator.of(context).pop();
     }
   }
 
