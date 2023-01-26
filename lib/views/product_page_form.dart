@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:app_loja_virtual/models/product.dart';
+import 'package:app_loja_virtual/models/utils/validations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ProductPageForm extends StatefulWidget {
   const ProductPageForm({super.key});
@@ -37,14 +39,19 @@ class _ProductPageFormState extends State<ProductPageForm> {
   }
 
   void submitForm() {
-    _formKey.currentState?.save();
-    final newProduct = Product(
-      id: Random().nextDouble().toString(),
-      title: _formData["name"].toString(),
-      description: _formData["description"].toString(),
-      price: _formData["price"] as double,
-      imageUrl: _formData["urlImage"].toString(),
-    );
+    final isvalid = _formKey.currentState?.validate() ?? false;
+    if (!isvalid) {
+      return;
+    } else {
+      _formKey.currentState?.save();
+      final newProduct = Product(
+        id: Random().nextDouble().toString(),
+        title: _formData["name"].toString(),
+        description: _formData["description"].toString(),
+        price: _formData["price"] as double,
+        imageUrl: _formData["urlImage"].toString(),
+      );
+    }
   }
 
   @override
@@ -69,15 +76,19 @@ class _ProductPageFormState extends State<ProductPageForm> {
           child: ListView(
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: "Nome"),
+                decoration: const InputDecoration(
+                  labelText: "Nome",
+                ),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(priceFocus);
                 },
                 onSaved: (name) => _formData["name"] = name ?? "",
+                validator: (value) => Validations.validarNome(value),
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: "Preço"),
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 textInputAction: TextInputAction.next,
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
@@ -88,6 +99,7 @@ class _ProductPageFormState extends State<ProductPageForm> {
                 },
                 onSaved: (price) => _formData["price"] =
                     double.tryParse(price.toString()) ?? 0.0,
+                validator: (value) => Validations.validarPreco(value),
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: "Descrição"),
@@ -99,6 +111,7 @@ class _ProductPageFormState extends State<ProductPageForm> {
                 },
                 onSaved: (description) =>
                     _formData["description"] = description ?? "",
+                validator: (value) => Validations.validarDescricao(value),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -113,6 +126,7 @@ class _ProductPageFormState extends State<ProductPageForm> {
                       focusNode: urlFocus,
                       keyboardType: TextInputType.url,
                       onFieldSubmitted: (_) => submitForm(),
+                      validator: (value) => Validations.validarUrl(value),
                       onSaved: (urlImage) =>
                           _formData["urlImage"] = urlImage ?? "",
                     ),
