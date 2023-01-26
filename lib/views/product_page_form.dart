@@ -10,11 +10,26 @@ class ProductPageForm extends StatefulWidget {
 class _ProductPageFormState extends State<ProductPageForm> {
   final priceFocus = FocusNode();
   final descriptionFocus = FocusNode();
+  final urlFocus = FocusNode();
+  final controllerUrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    controllerUrl.addListener(atualizarImagem);
+  }
+
   @override
   void dispose() {
     priceFocus.dispose();
     descriptionFocus.dispose();
+    urlFocus.removeListener(atualizarImagem);
+    urlFocus.dispose();
     super.dispose();
+  }
+
+  atualizarImagem() {
+    setState(() {});
   }
 
   @override
@@ -49,10 +64,51 @@ class _ProductPageFormState extends State<ProductPageForm> {
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: "Descrição"),
-                textInputAction: TextInputAction.next,
                 focusNode: descriptionFocus,
                 keyboardType: TextInputType.multiline,
                 maxLines: 3,
+                onFieldSubmitted: (_) {
+                  FocusScope.of(context).requestFocus(urlFocus);
+                },
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: controllerUrl,
+                      textInputAction: TextInputAction.done,
+                      decoration: const InputDecoration(
+                        labelText: "Url da Imagem",
+                      ),
+                      focusNode: urlFocus,
+                      keyboardType: TextInputType.url,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 100,
+                    width: 100,
+                    margin: const EdgeInsets.only(
+                      top: 10,
+                      left: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 1,
+                      ),
+                    ),
+                    child: controllerUrl.text.isEmpty
+                        ? const Text("Informe a Url")
+                        : FittedBox(
+                            fit: BoxFit.cover,
+                            child: Image.network(
+                              controllerUrl.text,
+                            ),
+                          ),
+                  )
+                ],
               ),
             ],
           ),
