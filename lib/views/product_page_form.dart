@@ -1,8 +1,6 @@
-import 'dart:math';
-
 import 'package:app_loja_virtual/controller/controller_product.dart';
 import 'package:app_loja_virtual/models/product.dart';
-import 'package:app_loja_virtual/models/utils/routes.dart';
+
 import 'package:app_loja_virtual/models/utils/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,8 +47,25 @@ class _ProductPageFormState extends State<ProductPageForm> {
       _formKey.currentState?.save();
 
       Provider.of<ControllerProduct>(context, listen: false)
-          .addProductFromData(_formData);
+          .saveProductFromData(_formData);
       Navigator.of(context).pop();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_formData.isEmpty) {
+      final arg = ModalRoute.of(context)?.settings.arguments;
+      if (arg != null) {
+        final product = arg as Product;
+        _formData["id"] = product.getId;
+        _formData["name"] = product.getTitle;
+        _formData["description"] = product.getDescription;
+        _formData["price"] = product.getPrice;
+        _formData["imageUrl"] = product.getImageUrl;
+        controllerUrl.text = product.getImageUrl;
+      }
     }
   }
 
@@ -76,6 +91,7 @@ class _ProductPageFormState extends State<ProductPageForm> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _formData["name"]?.toString(),
                 decoration: const InputDecoration(
                   labelText: "Nome",
                 ),
@@ -87,6 +103,7 @@ class _ProductPageFormState extends State<ProductPageForm> {
                 validator: (value) => Validations.validarNome(value),
               ),
               TextFormField(
+                initialValue: _formData["price"]?.toString(),
                 decoration: const InputDecoration(labelText: "Preço"),
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 textInputAction: TextInputAction.next,
@@ -102,6 +119,7 @@ class _ProductPageFormState extends State<ProductPageForm> {
                 validator: (value) => Validations.validarPreco(value),
               ),
               TextFormField(
+                initialValue: _formData["description"]?.toString(),
                 decoration: const InputDecoration(labelText: "Descrição"),
                 focusNode: descriptionFocus,
                 keyboardType: TextInputType.multiline,

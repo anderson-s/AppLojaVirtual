@@ -1,4 +1,5 @@
 import 'package:app_loja_virtual/models/product.dart';
+import 'package:app_loja_virtual/models/utils/routes.dart';
 import 'package:flutter/material.dart';
 
 class ProductItemComponent extends StatelessWidget {
@@ -12,12 +13,18 @@ class ProductItemComponent extends StatelessWidget {
         backgroundImage: NetworkImage(product.getImageUrl),
       ),
       title: Text(product.getTitle),
-      trailing: Container(
+      trailing: SizedBox(
         width: 100,
         child: Row(
           children: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.formProduct,
+                    arguments: product,
+                  );
+                },
                 icon: Icon(
                   Icons.edit,
                   color: Theme.of(context).colorScheme.primary,
