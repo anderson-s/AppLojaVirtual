@@ -32,7 +32,7 @@ class MyWidget extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ControllerCart(),
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProvider( 
           create: (_) => ControllerOrder(),
         ),
       ],

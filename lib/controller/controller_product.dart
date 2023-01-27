@@ -14,7 +14,7 @@ class ControllerProduct with ChangeNotifier {
     return [..._products];
   }
 
-  void saveProductFromData(Map<String, Object> data) {
+  Future<void> saveProductFromData(Map<String, Object> data) {
     final hasId = data["id"] != null;
 
     final product = Product(
@@ -32,7 +32,7 @@ class ControllerProduct with ChangeNotifier {
     }
   }
 
-  addProduct(Product product) async {
+  Future<void> addProduct(Product product) async {
     final future = http.post(
       Uri.parse("$baseUrl/produtos.json"),
       body: jsonEncode(
@@ -44,7 +44,7 @@ class ControllerProduct with ChangeNotifier {
         },
       ),
     );
-    future.then(
+    future.then<void>(
       (value) {
         final id = jsonDecode(value.body)["name"];
         _products.add(
@@ -61,7 +61,7 @@ class ControllerProduct with ChangeNotifier {
     );
   }
 
-  void updateProduct(Product product) {
+  Future<void> updateProduct(Product product) async {
     int index =
         _products.indexWhere((element) => element.getId == product.getId);
 
