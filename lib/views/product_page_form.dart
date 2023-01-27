@@ -165,15 +165,8 @@ class _ProductPageFormState extends State<ProductPageForm> {
                     ),
                     child: controllerUrl.text.isEmpty
                         ? const Text("Informe a Url")
-                        : Container(
-                          height: 100,
-                          width: 100,
-                          child: FittedBox(
-                              fit: BoxFit.cover,
-                              child: Image.network(
-                                controllerUrl.text,
-                              ),
-                            ),
+                        : Image.network(
+                          controllerUrl.text,
                         ),
                   )
                 ],

@@ -32,8 +32,8 @@ class ControllerProduct with ChangeNotifier {
     }
   }
 
-  void addProduct(Product product) {
-    http.post(
+  addProduct(Product product) async {
+    final future = http.post(
       Uri.parse("$baseUrl/produtos.json"),
       body: jsonEncode(
         {
@@ -44,8 +44,21 @@ class ControllerProduct with ChangeNotifier {
         },
       ),
     );
-    _products.add(product);
-    notifyListeners();
+    future.then(
+      (value) {
+        final id = jsonDecode(value.body)["name"];
+        _products.add(
+          Product(
+            id: id,
+            title: product.getTitle,
+            description: product.getDescription,
+            price: product.getPrice,
+            imageUrl: product.getImageUrl,
+          ),
+        );
+        notifyListeners();
+      },
+    );
   }
 
   void updateProduct(Product product) {
