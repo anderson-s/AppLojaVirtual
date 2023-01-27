@@ -44,5 +44,14 @@ class ControllerProduct with ChangeNotifier {
     }
   }
 
+  deleteProduct(Product product) {
+    int index =
+        _products.indexWhere((element) => element.getId == product.getId);
+    if (index >= 0) {
+      _products.removeAt(index);
+      notifyListeners();
+    }
+  }
+
   int get itemsCount => _products.length;
 }

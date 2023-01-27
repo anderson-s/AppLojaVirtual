@@ -1,6 +1,8 @@
+import 'package:app_loja_virtual/controller/controller_product.dart';
 import 'package:app_loja_virtual/models/product.dart';
 import 'package:app_loja_virtual/models/utils/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductItemComponent extends StatelessWidget {
   final Product product;
@@ -30,7 +32,37 @@ class ProductItemComponent extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                 )),
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog<bool>(
+                    context: context,
+                    builder: (ctx) {
+                      return AlertDialog(
+                        title: const Text("Tem Certeza?"),
+                        content: const Text("Quer mesmo remover o produto?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop(false);
+                            },
+                            child: const Text("Não"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop(true);
+                            },
+                            child: const Text("Sim"),
+                          ),
+                        ],
+                      );
+                    },
+                  ).then((value) {
+                    if (value ?? false) {
+                      return Provider.of<ControllerProduct>(context,
+                              listen: false)
+                          .deleteProduct(product);
+                    }
+                  });
+                },
                 icon: Icon(
                   Icons.delete,
                   color: Theme.of(context).errorColor,
