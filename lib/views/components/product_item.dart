@@ -38,10 +38,11 @@ class ProductItem extends StatelessWidget {
                   duration: const Duration(seconds: 1),
                   content: const Text("Adicionado com sucesso"),
                   action: SnackBarAction(
-                      label: "DESFAZER",
-                      onPressed: () {
-                        cart.removeSingleItem(product.getId);
-                      }),
+                    label: "DESFAZER",
+                    onPressed: () {
+                      cart.removeSingleItem(product.getId);
+                    },
+                  ),
                 ),
               );
             },

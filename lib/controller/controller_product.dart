@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:app_loja_virtual/models/exceptions/http_exception.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_loja_virtual/models/product.dart';
 import 'package:flutter/material.dart';
@@ -102,12 +103,24 @@ class ControllerProduct with ChangeNotifier {
     }
   }
 
-  deleteProduct(Product product) {
+  Future<void> deleteProduct(Product product) async {
     int index =
         _products.indexWhere((element) => element.getId == product.getId);
     if (index >= 0) {
+      final p = _products[index];
       _products.removeAt(index);
       notifyListeners();
+      final response = await http
+          .delete(Uri.parse("$baseUrl/produtos/${product.getId}.json"));
+
+      if (response.statusCode >= 400) {
+        _products.insert(index, p);
+        notifyListeners();
+        throw HttpException(
+          msg: "Não foi possível excluir o produto.",
+          statusCode: response.statusCode,
+        );
+      }
     }
   }
 
