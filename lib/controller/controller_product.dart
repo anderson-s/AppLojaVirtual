@@ -11,9 +11,8 @@ class ControllerProduct with ChangeNotifier {
 
   Future<void> loadProducts() async {
     _products.clear();
-    final response =
-        await http.get(Uri.parse("${Constants.baseUrl}.json"));
-    if (jsonDecode(response.body) != null) {
+    final response = await http.get(Uri.parse("${Constants.baseUrl}.json"));
+    if (response.body != "null") {
       Map<String, dynamic> data = jsonDecode(response.body);
 
       data.forEach((key, value) {
@@ -89,8 +88,7 @@ class ControllerProduct with ChangeNotifier {
         _products.indexWhere((element) => element.getId == product.getId);
 
     if (index >= 0) {
-      await http.patch(
-          Uri.parse("${Constants.baseUrl}/${product.getId}.json"),
+      await http.patch(Uri.parse("${Constants.baseUrl}/${product.getId}.json"),
           body: jsonEncode(
             {
               "name": product.getTitle,
@@ -112,8 +110,8 @@ class ControllerProduct with ChangeNotifier {
       final p = _products[index];
       _products.removeAt(index);
       notifyListeners();
-      final response = await http.delete(
-          Uri.parse("${Constants.baseUrl}/${product.getId}.json"));
+      final response = await http
+          .delete(Uri.parse("${Constants.baseUrl}/${product.getId}.json"));
 
       if (response.statusCode >= 400) {
         _products.insert(index, p);
