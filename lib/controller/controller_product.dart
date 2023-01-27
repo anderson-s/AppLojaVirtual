@@ -87,6 +87,16 @@ class ControllerProduct with ChangeNotifier {
         _products.indexWhere((element) => element.getId == product.getId);
 
     if (index >= 0) {
+      await http.patch(Uri.parse("$baseUrl/produtos/${product.getId}.json"),
+          body: jsonEncode(
+            {
+              "name": product.getTitle,
+              "description": product.getDescription,
+              "price": product.getPrice,
+              "imageUrl": product.getImageUrl,
+            },
+          ));
+
       _products[index] = product;
       notifyListeners();
     }
