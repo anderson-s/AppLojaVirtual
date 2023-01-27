@@ -1,5 +1,4 @@
 import 'package:app_loja_virtual/controller/controller_product.dart';
-import 'package:app_loja_virtual/models/exceptions/http_exception.dart';
 import 'package:app_loja_virtual/models/product.dart';
 import 'package:app_loja_virtual/models/utils/routes.dart';
 import 'package:flutter/material.dart';

@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:app_loja_virtual/models/exceptions/http_exception.dart';
+import 'package:app_loja_virtual/models/services/contants.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_loja_virtual/models/product.dart';
 import 'package:flutter/material.dart';
 
 class ControllerProduct with ChangeNotifier {
-  final baseUrl =
-      "https://minhalojavirtual-5d19d-default-rtdb.asia-southeast1.firebasedatabase.app/";
   final List<Product> _products = [];
 
   Future<void> loadProducts() async {
     _products.clear();
-    final response = await http.get(Uri.parse("$baseUrl/produtos.json"));
+    final response =
+        await http.get(Uri.parse("${Constants.baseUrl}/produtos.json"));
     if (jsonDecode(response.body) != null) {
       Map<String, dynamic> data = jsonDecode(response.body);
 
@@ -47,6 +47,7 @@ class ControllerProduct with ChangeNotifier {
       description: data["description"].toString(),
       price: data["price"] as double,
       imageUrl: data["urlImage"].toString(),
+      isFavorite: data["isFavorite"] as bool,
     );
 
     if (hasId) {
@@ -58,7 +59,7 @@ class ControllerProduct with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     final future = await http.post(
-      Uri.parse("$baseUrl/produtos.json"),
+      Uri.parse("${Constants.baseUrl}/produtos.json"),
       body: jsonEncode(
         {
           "name": product.getTitle,
@@ -88,7 +89,8 @@ class ControllerProduct with ChangeNotifier {
         _products.indexWhere((element) => element.getId == product.getId);
 
     if (index >= 0) {
-      await http.patch(Uri.parse("$baseUrl/produtos/${product.getId}.json"),
+      await http.patch(
+          Uri.parse("${Constants.baseUrl}/produtos/${product.getId}.json"),
           body: jsonEncode(
             {
               "name": product.getTitle,
@@ -110,8 +112,8 @@ class ControllerProduct with ChangeNotifier {
       final p = _products[index];
       _products.removeAt(index);
       notifyListeners();
-      final response = await http
-          .delete(Uri.parse("$baseUrl/produtos/${product.getId}.json"));
+      final response = await http.delete(
+          Uri.parse("$Constants.baseUrl/produtos/${product.getId}.json"));
 
       if (response.statusCode >= 400) {
         _products.insert(index, p);

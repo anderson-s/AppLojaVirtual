@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:app_loja_virtual/models/exceptions/http_exception.dart';
+import 'package:app_loja_virtual/models/services/contants.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Product with ChangeNotifier {
   final String id;
@@ -41,8 +46,26 @@ class Product with ChangeNotifier {
 
   set setIsFavorite(isFavorite) => isFavorite = isFavorite;
 
-  void togleIsFavorite() {
+  void _togleIsFavorite() {
     isFavorite = !isFavorite;
     notifyListeners();
+  }
+
+  Future<void> togleIsFavorite() async {
+    try {
+      _togleIsFavorite();
+
+      final response = await http.patch(
+          Uri.parse("${Constants.baseUrl}/produtos/$id.json"),
+          body: jsonEncode({"isFavorite": isFavorite}));
+
+      if (response.statusCode >= 400) {
+        _togleIsFavorite();
+      }
+    } on HttpException catch (error) {
+      throw HttpException(
+          msg: "Não foi possível favoritar o produto.",
+          statusCode: error.statusCode);
+    }
   }
 }
