@@ -1,4 +1,5 @@
 import 'package:app_loja_virtual/controller/controller_cart.dart';
+import 'package:app_loja_virtual/controller/controller_product.dart';
 import 'package:app_loja_virtual/views/components/app_drawer.dart';
 import 'package:app_loja_virtual/views/components/badge.dart';
 import 'package:app_loja_virtual/views/components/product_grid_item.dart';
@@ -14,6 +15,19 @@ class ProductsOverView extends StatefulWidget {
 
 class _ProductsOverViewState extends State<ProductsOverView> {
   bool optionsFilters = false;
+  bool progresso = true;
+  @override
+  void initState() {
+    Provider.of<ControllerProduct>(context, listen: false)
+        .loadProducts()
+        .then((value) {
+      setState(() {
+        progresso = false;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +74,13 @@ class _ProductsOverViewState extends State<ProductsOverView> {
         ],
       ),
       drawer: const AppDrawer(),
-      body: ProductGridItem(optionFilters: optionsFilters),
+      body: progresso
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductGridItem(
+              optionFilters: optionsFilters,
+            ),
     );
   }
 }

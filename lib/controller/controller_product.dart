@@ -1,14 +1,37 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:http/http.dart' as http;
-import 'package:app_loja_virtual/models/data/products_data.dart';
 import 'package:app_loja_virtual/models/product.dart';
 import 'package:flutter/material.dart';
 
 class ControllerProduct with ChangeNotifier {
   final baseUrl =
       "https://minhalojavirtual-5d19d-default-rtdb.asia-southeast1.firebasedatabase.app/";
-  final List<Product> _products = productsList;
+  final List<Product> _products = [];
+
+  Future<void> loadProducts() async {
+    _products.clear();
+    final response = await http.get(Uri.parse("$baseUrl/produtos.json"));
+    if (jsonDecode(response.body) != null) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      data.forEach((key, value) {
+        _products.add(
+          Product(
+            id: key,
+            title: value["name"],
+            description: value["description"],
+            price: value["price"],
+            imageUrl: value["imageUrl"],
+            isFavorite: value["isFavorite"],
+          ),
+        );
+        notifyListeners();
+      });
+    } else {
+      return;
+    }
+  }
 
   List<Product> get returnProducts {
     return [..._products];
@@ -41,6 +64,7 @@ class ControllerProduct with ChangeNotifier {
           "description": product.getDescription,
           "price": product.getPrice,
           "imageUrl": product.getImageUrl,
+          "isFavorite": product.getIsFavorite,
         },
       ),
     );
@@ -52,6 +76,7 @@ class ControllerProduct with ChangeNotifier {
         description: product.getDescription,
         price: product.getPrice,
         imageUrl: product.getImageUrl,
+        isFavorite: product.getIsFavorite,
       ),
     );
     notifyListeners();
