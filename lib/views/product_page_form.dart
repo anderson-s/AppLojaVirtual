@@ -47,12 +47,32 @@ class _ProductPageFormState extends State<ProductPageForm> {
     } else {
       _formKey.currentState?.save();
       setState(() => progresso = true);
-      Provider.of<ControllerProduct>(context, listen: false)
-          .saveProductFromData(_formData)
-          .then((value) {
-        setState(() => progresso = false);
+      try {
+        await Provider.of<ControllerProduct>(context, listen: false)
+            .saveProductFromData(_formData);
         Navigator.of(context).pop();
-      });
+      } catch (error) {
+        await showDialog<void>(
+          context: context,
+          builder: (ctx) {
+            return AlertDialog(
+              title: const Text("Ocorreu um erro!"),
+              content:
+                  const Text("Ocorreu um erro ao tentar salvar o produto!"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Ok"),
+                )
+              ],
+            );
+          },
+        );
+      } finally {
+        setState(() => progresso = false);
+      }
     }
   }
 
