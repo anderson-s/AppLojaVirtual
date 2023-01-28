@@ -1,5 +1,7 @@
+import 'package:app_loja_virtual/controller/controller_auth.dart';
 import 'package:app_loja_virtual/models/utils/validations.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 enum AuthMode { sinup, login }
 
@@ -20,8 +22,18 @@ class _AuthFormState extends State<AuthForm> {
     "email": "",
     "password": "",
   };
+  bool isLogin() => _authMode == AuthMode.login;
+  void selecionarModo() {
+    setState(() {
+      if (isLogin()) {
+        _authMode = AuthMode.sinup;
+      } else {
+        _authMode = AuthMode.login;
+      }
+    });
+  }
 
-  void _submit() {
+  Future<void> _submit() async {
     final isValid = formKey.currentState?.validate() ?? false;
     if (!isValid) {
       return;
@@ -30,22 +42,19 @@ class _AuthFormState extends State<AuthForm> {
       progresso = true;
     });
     formKey.currentState?.save();
-    if(isLogin()){
-      //Login 
-    }else{
-      //registrar
-    }
-  }
-
-  bool isLogin() => _authMode == AuthMode.login;
-
-  void selecionarModo() {
-    setState(() {
-      if (isLogin()) {
-        _authMode = AuthMode.sinup;
-      } else {
-        _authMode = AuthMode.login;
+    final auth = Provider.of<ControllerAuth>(context, listen: false);
+    if (isLogin()) {
+      print("login");
+      //Login
+    } else {
+      try {
+        await auth.signup(_formData["email"]!, _formData["password"]!);
+      } catch (error) {
+        return;
       }
+    }
+    setState(() {
+      progresso = true;
     });
   }
 
@@ -72,10 +81,11 @@ class _AuthFormState extends State<AuthForm> {
                   labelText: "E-mail",
                 ),
                 keyboardType: TextInputType.emailAddress,
-                onSaved: (email) => _formData["email"] ?? "",
+                onSaved: (email) => _formData["email"] = email ?? "",
                 validator: (email) => Validations.validarEmail(email),
               ),
               TextFormField(
+                controller: _controllerPassword,
                 decoration: InputDecoration(
                   labelText: "Senha",
                   suffixIcon: isLogin()
@@ -93,7 +103,7 @@ class _AuthFormState extends State<AuthForm> {
                 ),
                 obscureText: (!isLogin()) ? true : !verSenha,
                 keyboardType: TextInputType.visiblePassword,
-                onSaved: (password) => _formData["password"] ?? "",
+                onSaved: (password) => _formData["password"] = password ?? "",
                 validator: (value) =>
                     Validations.validarSenha(value.toString()),
               ),
@@ -115,7 +125,8 @@ class _AuthFormState extends State<AuthForm> {
                   obscureText: !verSenha,
                   keyboardType: TextInputType.visiblePassword,
                   validator: (value) {
-                    if (_controllerPassword.text != value.toString()) {
+                    final valor = value ?? "";
+                    if (_controllerPassword.text != valor) {
                       return "As senhas informadas não conferem";
                     }
                     return null;

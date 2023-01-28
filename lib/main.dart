@@ -1,3 +1,4 @@
+import 'package:app_loja_virtual/controller/controller_auth.dart';
 import 'package:app_loja_virtual/controller/controller_cart.dart';
 import 'package:app_loja_virtual/controller/controller_order.dart';
 import 'package:app_loja_virtual/controller/controller_product.dart';
@@ -36,6 +37,9 @@ class MyWidget extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ControllerOrder(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => ControllerAuth(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
