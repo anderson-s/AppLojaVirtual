@@ -19,11 +19,11 @@ class ControllerProduct with ChangeNotifier {
         _products.add(
           Product(
             id: key,
-            title: value["name"],
-            description: value["description"],
-            price: value["price"],
-            imageUrl: value["imageUrl"],
-            isFavorite: value["isFavorite"],
+            title: value["name"].toString(),
+            description: value["description"].toString(),
+            price: double.tryParse(value["price"].toString()) ?? 0.0,
+            imageUrl: value["imageUrl"].toString(),
+            isFavorite: value["isFavorite"] as bool,
           ),
         );
         notifyListeners();

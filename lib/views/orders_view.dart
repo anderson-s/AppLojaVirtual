@@ -4,51 +4,46 @@ import 'package:app_loja_virtual/views/components/order_component.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class OrdersView extends StatefulWidget {
+class OrdersView extends StatelessWidget {
   const OrdersView({super.key});
 
   @override
-  State<OrdersView> createState() => _OrdersViewState();
-}
-
-class _OrdersViewState extends State<OrdersView> {
-  bool progresso = true;
-  @override
-  void initState() {
-    Provider.of<ControllerOrder>(context, listen: false)
-        .loadOrder()
-        .then((value) {
-      setState(() {
-        progresso = false;
-      });
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final ControllerOrder orders = Provider.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Meus Pedidos"),
         centerTitle: true,
       ),
       drawer: const AppDrawer(),
-      body: progresso
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : RefreshIndicator(
-              onRefresh: () =>
-                  Provider.of<ControllerOrder>(context, listen: false)
-                      .loadOrder(),
-              child: ListView.builder(
-                itemCount: orders.itemsCount,
-                itemBuilder: (context, index) {
-                  return OrderComponent(order: orders.items[index]);
+      body: FutureBuilder(
+        future:
+            Provider.of<ControllerOrder>(context, listen: false).loadOrder(),
+        builder: (ctx, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              return const Center(child: CircularProgressIndicator());
+            case ConnectionState.done:
+              return Consumer<ControllerOrder>(
+                builder: (ctx, value, child) {
+                  if (value.itemsCount == 0) {
+                    return const Center(
+                      child: Text("Não existem pedidos!"),
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: value.itemsCount,
+                      itemBuilder: (ctx, index) {
+                        return OrderComponent(order: value.items[index]);
+                      },
+                    );
+                  }
                 },
-              ),
-            ),
+              );
+          }
+        },
+      ),
     );
   }
 }
