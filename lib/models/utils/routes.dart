@@ -1,5 +1,6 @@
 class Routes {
-  static const home = "/";
+  static const authView = "/";
+  static const home = "/home";
   static const detail = "/detail";
   static const cart = "/cart";
   static const orders = "/orders";

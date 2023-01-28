@@ -38,4 +38,24 @@ class Validations {
       return null;
     }
   }
+
+  static validarEmail(validator) {
+    if (validator.toString().isEmpty) {
+      return "O email é obrigatório";
+    } else if (!validator.trim().toString().contains("@")){
+      return "Informe um email válido";
+    } else {
+      return;
+    }
+  }
+
+  static validarSenha(validator) {
+    if (validator.toString().isEmpty) {
+      return "A senha é obrigatória";
+    } else if (validator.toString().length < 6) {
+      return "A senha deve ter pelo menos 6 caracteres";
+    } else {
+      return;
+    }
+  }
 }

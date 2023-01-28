@@ -2,6 +2,7 @@ import 'package:app_loja_virtual/controller/controller_cart.dart';
 import 'package:app_loja_virtual/controller/controller_order.dart';
 import 'package:app_loja_virtual/controller/controller_product.dart';
 import 'package:app_loja_virtual/models/utils/routes.dart';
+import 'package:app_loja_virtual/views/auth_view.dart';
 import 'package:app_loja_virtual/views/cart_view.dart';
 import 'package:app_loja_virtual/views/orders_view.dart';
 import 'package:app_loja_virtual/views/product_detail.dart';
@@ -32,7 +33,7 @@ class MyWidget extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ControllerCart(),
         ),
-        ChangeNotifierProvider( 
+        ChangeNotifierProvider(
           create: (_) => ControllerOrder(),
         ),
       ],
@@ -51,14 +52,21 @@ class MyWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+          textTheme: tema.textTheme.copyWith(
+            headline6: const TextStyle(
+              fontFamily: "Anton",
+              color: Colors.white,
+            ),
+          ),
         ),
         routes: {
+          Routes.authView: (context) => const AuthView(),
           Routes.home: (ctx) => const ProductsOverView(),
           Routes.detail: (ctx) => const ProductDetail(),
           Routes.cart: (ctx) => const CartView(),
-          Routes.orders:(context) => const OrdersView(),
-          Routes.productsPage:(context) => const ProductsPage(),
-          Routes.formProduct:(context) => const ProductPageForm()
+          Routes.orders: (context) => const OrdersView(),
+          Routes.productsPage: (context) => const ProductsPage(),
+          Routes.formProduct: (context) => const ProductPageForm()
         },
       ),
     );
