@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:app_loja_virtual/models/exceptions/exceptions_auth.dart';
@@ -9,6 +10,7 @@ class ControllerAuth with ChangeNotifier {
   String? _email;
   String? _uid;
   DateTime? _expiryDate;
+  Timer? _logoutTime;
 
   bool get isAuth {
     final isValid = _expiryDate?.isAfter(DateTime.now()) ?? false;
@@ -60,6 +62,7 @@ class ControllerAuth with ChangeNotifier {
           ),
         ),
       );
+      autoLogout();
       notifyListeners();
     }
   }
@@ -77,6 +80,15 @@ class ControllerAuth with ChangeNotifier {
     _email = null;
     _expiryDate = null;
     _uid = null;
+    _logoutTime?.cancel();
+    _logoutTime = null;
     notifyListeners();
+  }
+
+  void autoLogout() {
+    _logoutTime?.cancel();
+    _logoutTime = null;
+    final timeToLogout = _expiryDate?.difference(DateTime.now()).inSeconds;
+    _logoutTime = Timer(Duration(seconds: timeToLogout ?? 0), logout);
   }
 }
