@@ -7,11 +7,15 @@ import 'package:app_loja_virtual/models/product.dart';
 import 'package:flutter/material.dart';
 
 class ControllerProduct with ChangeNotifier {
-  final List<Product> _products = [];
+  List<Product> _products = [];
+  String _token;
+
+  ControllerProduct(this._token, this._products);
 
   Future<void> loadProducts() async {
     _products.clear();
-    final response = await http.get(Uri.parse("${Constants.baseUrl}.json"));
+    final response =
+        await http.get(Uri.parse("${Constants.baseUrl}.json?auth=$_token"));
     if (response.body != "null") {
       Map<String, dynamic> data = jsonDecode(response.body);
 

@@ -30,7 +30,14 @@ class MyWidget extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => ControllerProduct(),
+          create: (_) => ControllerAuth(),
+        ),
+        ChangeNotifierProxyProvider<ControllerAuth, ControllerProduct>(
+          create: (_) => ControllerProduct("", []),
+          update: (context, value, previous) => ControllerProduct(
+            value.token ?? "",
+            previous?.returnProducts ?? [],
+          ),
         ),
         ChangeNotifierProvider(
           create: (_) => ControllerCart(),
@@ -38,9 +45,6 @@ class MyWidget extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => ControllerOrder(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => ControllerAuth(),
-        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -65,7 +69,7 @@ class MyWidget extends StatelessWidget {
           ),
         ),
         routes: {
-          Routes.authOrHome:(context) => const AuthOrHomeView(),
+          Routes.authOrHome: (context) => const AuthOrHomeView(),
           Routes.detail: (ctx) => const ProductDetail(),
           Routes.cart: (ctx) => const CartView(),
           Routes.orders: (context) => const OrdersView(),
