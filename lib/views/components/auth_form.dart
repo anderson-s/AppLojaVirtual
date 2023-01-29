@@ -1,4 +1,7 @@
+import 'dart:html';
+
 import 'package:app_loja_virtual/controller/controller_auth.dart';
+import 'package:app_loja_virtual/models/exceptions/exceptions_auth.dart';
 import 'package:app_loja_virtual/models/utils/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +36,37 @@ class _AuthFormState extends State<AuthForm> {
     });
   }
 
+  popUpError(String msg) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text(
+            "Ocorreu um erro!",
+            style: TextStyle(
+              fontFamily: "Lato",
+              color: Colors.black,
+            ),
+          ),
+          content: Text(
+            msg,
+            style: const TextStyle(
+              fontFamily: "Lato",
+              color: Colors.black,
+            ),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Ok"))
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _submit() async {
     final isValid = formKey.currentState?.validate() ?? false;
     if (!isValid) {
@@ -43,13 +77,17 @@ class _AuthFormState extends State<AuthForm> {
     });
     formKey.currentState?.save();
     final auth = Provider.of<ControllerAuth>(context, listen: false);
-    isLogin()
-        ? await auth.signin(_formData["email"]!, _formData["password"]!)
-        : await auth.signup(_formData["email"]!, _formData["password"]!);
-
-    setState(() {
-      progresso = false;
-    });
+    try {
+      isLogin()
+          ? await auth.signin(_formData["email"]!, _formData["password"]!)
+          : await auth.signup(_formData["email"]!, _formData["password"]!);
+    } on ExceptionsAuth catch (error) {
+      popUpError(error.toString());
+    } catch (error) {
+      popUpError("Ocorreu um erro inesperado.");
+    } finally {
+      setState(() => progresso = false);
+    }
   }
 
   @override
