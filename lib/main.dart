@@ -43,6 +43,7 @@ class MyWidget extends StatelessWidget {
           update: (context, value, previous) => ControllerOrder(
             value.token ?? "",
             previous?.items ?? [],
+            value.uid ?? "",
           ),
         ),
         ChangeNotifierProvider(

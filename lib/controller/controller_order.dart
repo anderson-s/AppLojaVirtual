@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 class ControllerOrder with ChangeNotifier {
   List<Order> _items;
   final String _token;
-  ControllerOrder([this._token = "", this._items = const []]);
+  final String _uid;
+  ControllerOrder([this._token = "", this._items = const [], this._uid = ""]);
 
   List<Order> get items => [..._items];
 
@@ -18,7 +19,7 @@ class ControllerOrder with ChangeNotifier {
   Future<void> loadOrder() async {
     List<Order> items = [];
     final response =
-        await http.get(Uri.parse("${Constants.pedidos}.json?auth=$_token"));
+        await http.get(Uri.parse("${Constants.pedidos}/$_uid/.json?auth=$_token"));
     if (response.body == "null") {
       return;
     }
@@ -52,7 +53,7 @@ class ControllerOrder with ChangeNotifier {
   Future<void> addOrder(ControllerCart cart) async {
     final data = DateTime.now();
     final response = await http.post(
-      Uri.parse("${Constants.pedidos}.json?auth=$_token"),
+      Uri.parse("${Constants.pedidos}/$_uid/.json?auth=$_token"),
       body: jsonEncode(
         {
           "total": cart.totalAmount,
