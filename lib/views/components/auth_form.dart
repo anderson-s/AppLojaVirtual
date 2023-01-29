@@ -18,7 +18,7 @@ class _AuthFormState extends State<AuthForm> {
   bool progresso = false;
   final TextEditingController _controllerPassword = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  Map<String, String> _formData = {
+  final Map<String, String> _formData = {
     "email": "",
     "password": "",
   };
@@ -43,18 +43,12 @@ class _AuthFormState extends State<AuthForm> {
     });
     formKey.currentState?.save();
     final auth = Provider.of<ControllerAuth>(context, listen: false);
-    if (isLogin()) {
-      print("login");
-      //Login
-    } else {
-      try {
-        await auth.signup(_formData["email"]!, _formData["password"]!);
-      } catch (error) {
-        return;
-      }
-    }
+    isLogin()
+        ? await auth.signin(_formData["email"]!, _formData["password"]!)
+        : await auth.signup(_formData["email"]!, _formData["password"]!);
+
     setState(() {
-      progresso = true;
+      progresso = false;
     });
   }
 

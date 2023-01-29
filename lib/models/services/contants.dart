@@ -3,7 +3,6 @@ class Constants{
     "https://minhalojavirtual-5d19d-default-rtdb.asia-southeast1.firebasedatabase.app/produtos";
    static const pedidos =
     "https://minhalojavirtual-5d19d-default-rtdb.asia-southeast1.firebasedatabase.app/pedidos";
-  static const cadastro = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBaWcEzSZNb11vAdOEOKBriNqUFIcddLmk";
 }
 
 
