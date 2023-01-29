@@ -31,14 +31,15 @@ class MyWidget extends StatelessWidget {
           create: (_) => ControllerAuth(),
         ),
         ChangeNotifierProxyProvider<ControllerAuth, ControllerProduct>(
-          create: (_) => ControllerProduct("", []),
+          create: (_) => ControllerProduct(),
           update: (context, value, previous) => ControllerProduct(
             value.token ?? "",
             previous?.returnProducts ?? [],
+            value.uid ?? "",
           ),
         ),
         ChangeNotifierProxyProvider<ControllerAuth, ControllerOrder>(
-          create: (_) => ControllerOrder("", []),
+          create: (_) => ControllerOrder(),
           update: (context, value, previous) => ControllerOrder(
             value.token ?? "",
             previous?.items ?? [],

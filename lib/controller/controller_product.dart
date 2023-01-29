@@ -9,17 +9,26 @@ import 'package:flutter/material.dart';
 class ControllerProduct with ChangeNotifier {
   final List<Product> _products;
   final String _token;
+  final String _uid;
 
-  ControllerProduct(this._token, this._products);
+  ControllerProduct(
+      [this._token = "", this._products = const [], this._uid = ""]);
 
   Future<void> loadProducts() async {
     _products.clear();
     final response =
         await http.get(Uri.parse("${Constants.baseUrl}.json?auth=$_token"));
     if (response.body != "null") {
+      final responseFav = await http.get(
+        Uri.parse("${Constants.favoritos}/$_uid.json?auth=$_token"),
+      );
+      Map<String, dynamic> favData =
+          responseFav.body == "null" ? {} : jsonDecode(responseFav.body);
+
       Map<String, dynamic> data = jsonDecode(response.body);
 
       data.forEach((key, value) {
+        final isFavorite = favData[key] ?? false;
         _products.add(
           Product(
             id: key,
@@ -27,7 +36,7 @@ class ControllerProduct with ChangeNotifier {
             description: value["description"].toString(),
             price: double.tryParse(value["price"].toString()) ?? 0.0,
             imageUrl: value["imageUrl"].toString(),
-            isFavorite: value["isFavorite"] as bool,
+            isFavorite: isFavorite,
           ),
         );
         notifyListeners();
@@ -50,7 +59,6 @@ class ControllerProduct with ChangeNotifier {
       description: data["description"].toString(),
       price: data["price"] as double,
       imageUrl: data["urlImage"].toString(),
-      isFavorite: hasId ? data["isFavorite"] as bool : false,
     );
 
     if (hasId) {
@@ -69,7 +77,6 @@ class ControllerProduct with ChangeNotifier {
           "description": product.getDescription,
           "price": product.getPrice,
           "imageUrl": product.getImageUrl,
-          "isFavorite": product.getIsFavorite,
         },
       ),
     );
@@ -81,7 +88,6 @@ class ControllerProduct with ChangeNotifier {
         description: product.getDescription,
         price: product.getPrice,
         imageUrl: product.getImageUrl,
-        isFavorite: product.getIsFavorite,
       ),
     );
     notifyListeners();

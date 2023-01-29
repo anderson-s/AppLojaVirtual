@@ -11,6 +11,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context);
     final cart = Provider.of<ControllerCart>(context);
+    final auth = Provider.of<ControllerAuth>(context, listen: false);
     final msg = ScaffoldMessenger.of(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -23,7 +24,9 @@ class ProductItem extends StatelessWidget {
                 onPressed: () async {
                   try {
                     await product.togleIsFavorite(
-                        Provider.of<ControllerAuth>(context, listen: false).token!);
+                      auth.token!,
+                      auth.uid!,
+                    );
                   } catch (error) {
                     msg.showSnackBar(
                       const SnackBar(

@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class ControllerOrder with ChangeNotifier {
   List<Order> _items;
   final String _token;
-  ControllerOrder(this._token, this._items);
+  ControllerOrder([this._token = "", this._items = const []]);
 
   List<Order> get items => [..._items];
 
