@@ -49,8 +49,8 @@ class _ProductPageFormState extends State<ProductPageForm> {
       setState(() => progresso = true);
       try {
         await Provider.of<ControllerProduct>(context, listen: false)
-            .saveProductFromData(_formData);
-        Navigator.of(context).pop();
+            .saveProductFromData(_formData)
+            .then((value) => Navigator.of(context).pop());
       } catch (error) {
         await showDialog<void>(
           context: context,
@@ -88,6 +88,7 @@ class _ProductPageFormState extends State<ProductPageForm> {
         _formData["description"] = product.getDescription;
         _formData["price"] = product.getPrice;
         _formData["imageUrl"] = product.getImageUrl;
+        _formData["isFavorite"] = product.getIsFavorite;
         controllerUrl.text = product.getImageUrl;
       }
     }

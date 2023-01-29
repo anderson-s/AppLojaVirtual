@@ -4,12 +4,10 @@ import 'package:app_loja_virtual/controller/controller_order.dart';
 import 'package:app_loja_virtual/controller/controller_product.dart';
 import 'package:app_loja_virtual/models/utils/routes.dart';
 import 'package:app_loja_virtual/views/auth_or_home_view.dart';
-import 'package:app_loja_virtual/views/auth_view.dart';
 import 'package:app_loja_virtual/views/cart_view.dart';
 import 'package:app_loja_virtual/views/orders_view.dart';
 import 'package:app_loja_virtual/views/product_detail.dart';
 import 'package:app_loja_virtual/views/product_page_form.dart';
-import 'package:app_loja_virtual/views/products_overview.dart';
 import 'package:app_loja_virtual/views/products_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,11 +37,15 @@ class MyWidget extends StatelessWidget {
             previous?.returnProducts ?? [],
           ),
         ),
-        ChangeNotifierProvider(
-          create: (_) => ControllerCart(),
+        ChangeNotifierProxyProvider<ControllerAuth, ControllerOrder>(
+          create: (_) => ControllerOrder("", []),
+          update: (context, value, previous) => ControllerOrder(
+            value.token ?? "",
+            previous?.items ?? [],
+          ),
         ),
         ChangeNotifierProvider(
-          create: (_) => ControllerOrder(),
+          create: (_) => ControllerCart(),
         ),
       ],
       child: MaterialApp(

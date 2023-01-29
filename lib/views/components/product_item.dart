@@ -1,5 +1,5 @@
+import 'package:app_loja_virtual/controller/controller_auth.dart';
 import 'package:app_loja_virtual/controller/controller_cart.dart';
-import 'package:app_loja_virtual/models/exceptions/http_exception.dart';
 import 'package:app_loja_virtual/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +22,8 @@ class ProductItem extends StatelessWidget {
               return IconButton(
                 onPressed: () async {
                   try {
-                    await product.togleIsFavorite();
+                    await product.togleIsFavorite(
+                        Provider.of<ControllerAuth>(context, listen: false).token!);
                   } catch (error) {
                     msg.showSnackBar(
                       const SnackBar(

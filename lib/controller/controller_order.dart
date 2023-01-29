@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:app_loja_virtual/models/cart.dart';
-import 'package:app_loja_virtual/models/product.dart';
 import 'package:app_loja_virtual/models/services/contants.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_loja_virtual/controller/controller_cart.dart';
@@ -9,15 +7,18 @@ import 'package:app_loja_virtual/models/order.dart';
 import 'package:flutter/material.dart';
 
 class ControllerOrder with ChangeNotifier {
-  final List<Order> _items = [];
+  List<Order> _items;
+  final String _token;
+  ControllerOrder(this._token, this._items);
 
   List<Order> get items => [..._items];
 
   int get itemsCount => _items.length;
 
   Future<void> loadOrder() async {
-    _items.clear();
-    final response = await http.get(Uri.parse("${Constants.pedidos}.json"));
+    List<Order> items = [];
+    final response =
+        await http.get(Uri.parse("${Constants.pedidos}.json?auth=$_token"));
     if (response.body == "null") {
       return;
     }
@@ -25,7 +26,7 @@ class ControllerOrder with ChangeNotifier {
 
     data.forEach(
       (key, value) {
-        _items.add(
+        items.add(
           Order(
             id: key,
             data: DateTime.parse(value["data"]),
@@ -43,15 +44,15 @@ class ControllerOrder with ChangeNotifier {
                 .toList(),
           ),
         );
-        notifyListeners();
       },
     );
+    _items = items.reversed.toList();
   }
 
   Future<void> addOrder(ControllerCart cart) async {
     final data = DateTime.now();
     final response = await http.post(
-      Uri.parse("${Constants.pedidos}.json"),
+      Uri.parse("${Constants.pedidos}.json?auth=$_token"),
       body: jsonEncode(
         {
           "total": cart.totalAmount,

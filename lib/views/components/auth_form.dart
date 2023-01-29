@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:app_loja_virtual/controller/controller_auth.dart';
 import 'package:app_loja_virtual/models/exceptions/exceptions_auth.dart';
 import 'package:app_loja_virtual/models/utils/validations.dart';
