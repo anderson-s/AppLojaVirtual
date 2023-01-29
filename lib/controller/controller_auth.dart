@@ -71,4 +71,12 @@ class ControllerAuth with ChangeNotifier {
   Future<void> signin(String email, String password) async {
     return services(email, password, "signInWithPassword");
   }
+
+  void logout() {
+    _token = null;
+    _email = null;
+    _expiryDate = null;
+    _uid = null;
+    notifyListeners();
+  }
 }

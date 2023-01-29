@@ -18,8 +18,9 @@ class ControllerOrder with ChangeNotifier {
 
   Future<void> loadOrder() async {
     List<Order> items = [];
-    final response =
-        await http.get(Uri.parse("${Constants.pedidos}/$_uid/.json?auth=$_token"));
+    final response = await http.get(
+      Uri.parse("${Constants.pedidos}/$_uid/.json?auth=$_token"),
+    );
     if (response.body == "null") {
       return;
     }
