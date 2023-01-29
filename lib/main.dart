@@ -3,6 +3,7 @@ import 'package:app_loja_virtual/controller/controller_cart.dart';
 import 'package:app_loja_virtual/controller/controller_order.dart';
 import 'package:app_loja_virtual/controller/controller_product.dart';
 import 'package:app_loja_virtual/models/utils/routes.dart';
+import 'package:app_loja_virtual/views/auth_or_home_view.dart';
 import 'package:app_loja_virtual/views/auth_view.dart';
 import 'package:app_loja_virtual/views/cart_view.dart';
 import 'package:app_loja_virtual/views/orders_view.dart';
@@ -64,8 +65,7 @@ class MyWidget extends StatelessWidget {
           ),
         ),
         routes: {
-          Routes.authView: (context) => const AuthView(),
-          Routes.home: (ctx) => const ProductsOverView(),
+          Routes.authOrHome:(context) => const AuthOrHomeView(),
           Routes.detail: (ctx) => const ProductDetail(),
           Routes.cart: (ctx) => const CartView(),
           Routes.orders: (context) => const OrdersView(),
