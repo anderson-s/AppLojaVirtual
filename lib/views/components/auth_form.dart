@@ -13,7 +13,8 @@ class AuthForm extends StatefulWidget {
   State<AuthForm> createState() => _AuthFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class _AuthFormState extends State<AuthForm>
+    with SingleTickerProviderStateMixin {
   AuthMode _authMode = AuthMode.login;
   bool verSenha = false;
   bool progresso = false;
@@ -23,13 +24,17 @@ class _AuthFormState extends State<AuthForm> {
     "email": "",
     "password": "",
   };
+  AnimationController? _controllerAnimation;
+  Animation<Size>? _heightAnimation;
   bool isLogin() => _authMode == AuthMode.login;
   void selecionarModo() {
     setState(() {
       if (isLogin()) {
         _authMode = AuthMode.sinup;
+        _controllerAnimation?.forward();
       } else {
         _authMode = AuthMode.login;
+        _controllerAnimation?.reverse();
       }
     });
   }
@@ -89,6 +94,33 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _controllerAnimation = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+    );
+    _heightAnimation = Tween(
+      begin: const Size(double.infinity, 310),
+      end: const Size(double.infinity, 400),
+    ).animate(
+      CurvedAnimation(
+        parent: _controllerAnimation!,
+        curve: Curves.linear,
+      ),
+    );
+    _heightAnimation?.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controllerAnimation?.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Card(
@@ -98,10 +130,8 @@ class _AuthFormState extends State<AuthForm> {
           10,
         ),
       ),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        height: isLogin() ? 310 : 400,
-        width: deviceSize.width * 0.75,
+      child: AnimatedBuilder(
+        animation: _heightAnimation!,
         child: Form(
           key: formKey,
           child: Column(
@@ -198,6 +228,12 @@ class _AuthFormState extends State<AuthForm> {
               )
             ],
           ),
+        ),
+        builder: (context, childForm) => Container(
+          padding: const EdgeInsets.all(16),
+          height: (_heightAnimation?.value.height) ?? (isLogin() ? 310 : 400),
+          width: deviceSize.width * 0.75,
+          child: childForm,
         ),
       ),
     );
