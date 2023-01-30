@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app_loja_virtual/models/data/store.dart';
 import 'package:app_loja_virtual/models/exceptions/exceptions_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -62,6 +63,15 @@ class ControllerAuth with ChangeNotifier {
           ),
         ),
       );
+      Store.saveMap(
+        "userData",
+        {
+          "token": _token,
+          "email": _email,
+          "uid": _uid,
+          "expiryDate": _expiryDate!.toIso8601String(),
+        },
+      );
       autoLogout();
       notifyListeners();
     }
@@ -75,6 +85,21 @@ class ControllerAuth with ChangeNotifier {
     return services(email, password, "signInWithPassword");
   }
 
+  Future<void> tryAutoLogin() async {
+    if (isAuth) return;
+    final userData = await Store.getMap("userData");
+    if (userData.isEmpty) return;
+    final expiryDate = DateTime.parse(userData["expiryDate"]);
+    if (expiryDate.isBefore(DateTime.now())) return;
+    _token = userData["token"];
+    _email = userData["email"];
+    _uid = userData["uid"];
+    _expiryDate = expiryDate;
+
+    autoLogout();
+    notifyListeners();
+  }
+
   void logout() {
     _token = null;
     _email = null;
@@ -82,7 +107,7 @@ class ControllerAuth with ChangeNotifier {
     _uid = null;
     _logoutTime?.cancel();
     _logoutTime = null;
-    notifyListeners();
+    Store.remove("userData").then((_) => notifyListeners());
   }
 
   void autoLogout() {

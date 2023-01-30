@@ -56,7 +56,12 @@ class _ProductPageFormState extends State<ProductPageForm> {
           context: context,
           builder: (ctx) {
             return AlertDialog(
-              title: const Text("Ocorreu um erro!"),
+              title: const Text(
+                "Ocorreu um erro!",
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
               content:
                   const Text("Ocorreu um erro ao tentar salvar o produto!"),
               actions: [
