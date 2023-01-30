@@ -109,6 +109,10 @@ class _AuthFormState extends State<AuthForm> {
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: "E-mail",
+                  suffixIcon: IconButton(
+                    onPressed: null,
+                    icon: Icon(Icons.email),
+                  ),
                 ),
                 keyboardType: TextInputType.emailAddress,
                 onSaved: (email) => _formData["email"] = email ?? "",
