@@ -130,8 +130,15 @@ class _AuthFormState extends State<AuthForm>
           10,
         ),
       ),
-      child: AnimatedBuilder(
-        animation: _heightAnimation!,
+      child: AnimatedContainer(
+        duration: const Duration(
+          milliseconds: 300,
+        ),
+        curve: Curves.easeIn,
+        height: isLogin() ? 310 : 400,
+        padding: const EdgeInsets.all(16),
+        // height: (_heightAnimation?.value.height) ?? (isLogin() ? 310 : 400),
+        width: deviceSize.width * 0.75,
         child: Form(
           key: formKey,
           child: Column(
@@ -228,12 +235,6 @@ class _AuthFormState extends State<AuthForm>
               )
             ],
           ),
-        ),
-        builder: (context, childForm) => Container(
-          padding: const EdgeInsets.all(16),
-          height: (_heightAnimation?.value.height) ?? (isLogin() ? 310 : 400),
-          width: deviceSize.width * 0.75,
-          child: childForm,
         ),
       ),
     );
