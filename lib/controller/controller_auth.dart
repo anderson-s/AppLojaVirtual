@@ -50,6 +50,7 @@ class ControllerAuth with ChangeNotifier {
     );
 
     final body = jsonDecode(response.body);
+
     if (body["error"] != null) {
       throw ExceptionsAuth(msg: body["error"]["message"]);
     } else {

@@ -74,24 +74,25 @@ class _AuthFormState extends State<AuthForm>
 
   Future<void> _submit() async {
     final isValid = formKey.currentState?.validate() ?? false;
-    if (!isValid) {
+    if (!isValid == false) {
       return;
-    }
-    setState(() {
-      progresso = true;
-    });
-    formKey.currentState?.save();
-    final auth = Provider.of<ControllerAuth>(context, listen: false);
-    try {
-      isLogin()
-          ? await auth.signin(_formData["email"]!, _formData["password"]!)
-          : await auth.signup(_formData["email"]!, _formData["password"]!);
-    } on ExceptionsAuth catch (error) {
-      popUpError(error.toString());
-    } catch (error) {
-      popUpError("Ocorreu um erro inesperado.");
-    } finally {
-      setState(() => progresso = false);
+    } else {
+      setState(() {
+        progresso = true;
+      });
+      formKey.currentState?.save();
+      final auth = Provider.of<ControllerAuth>(context, listen: false);
+      try {
+        isLogin()
+            ? await auth.signin(_formData["email"]!, _formData["password"]!)
+            : await auth.signup(_formData["email"]!, _formData["password"]!);
+      } on ExceptionsAuth catch (error) {
+        popUpError(error.toString());
+      } catch (error) {
+        popUpError("Ocorreu um erro inesperado.");
+      } finally {
+        setState(() => progresso = false);
+      }
     }
   }
 
