@@ -25,7 +25,8 @@ class _AuthFormState extends State<AuthForm>
     "password": "",
   };
   AnimationController? _controllerAnimation;
-  Animation<Size>? _heightAnimation;
+  Animation<double>? _opacityAnimation;
+  Animation<Offset>? _slideAnimation;
   bool isLogin() => _authMode == AuthMode.login;
   void selecionarModo() {
     setState(() {
@@ -60,10 +61,11 @@ class _AuthFormState extends State<AuthForm>
           ),
           actions: [
             TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Ok"))
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Ok"),
+            )
           ],
         );
       },
@@ -102,16 +104,24 @@ class _AuthFormState extends State<AuthForm>
         milliseconds: 300,
       ),
     );
-    _heightAnimation = Tween(
-      begin: const Size(double.infinity, 310),
-      end: const Size(double.infinity, 400),
+    _opacityAnimation = Tween(
+      begin: 0.0,
+      end: 1.0,
     ).animate(
       CurvedAnimation(
         parent: _controllerAnimation!,
         curve: Curves.linear,
       ),
     );
-    _heightAnimation?.addListener(() => setState(() {}));
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, -1.5),
+      end: const Offset(0, 0),
+    ).animate(
+      CurvedAnimation(
+        parent: _controllerAnimation!,
+        curve: Curves.linear,
+      ),
+    );
   }
 
   @override
@@ -137,7 +147,6 @@ class _AuthFormState extends State<AuthForm>
         curve: Curves.easeIn,
         height: isLogin() ? 310 : 400,
         padding: const EdgeInsets.all(16),
-        // height: (_heightAnimation?.value.height) ?? (isLogin() ? 310 : 400),
         width: deviceSize.width * 0.75,
         child: Form(
           key: formKey,
@@ -178,31 +187,46 @@ class _AuthFormState extends State<AuthForm>
                 validator: (value) =>
                     Validations.validarSenha(value.toString()),
               ),
-              if (!isLogin())
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: "Confirmar Senha",
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          verSenha = !verSenha;
-                        });
-                      },
-                      icon: Icon(
-                        verSenha ? Icons.visibility : Icons.visibility_off,
+              AnimatedContainer(
+                duration: const Duration(
+                  milliseconds: 300,
+                ),
+                constraints: BoxConstraints(
+                  minHeight: isLogin() ? 0 : 60,
+                  maxHeight: isLogin() ? 0 : 120,
+                ),
+                curve: Curves.linear,
+                child: FadeTransition(
+                  opacity: _opacityAnimation!,
+                  child: SlideTransition(
+                    position: _slideAnimation!,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Confirmar Senha",
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              verSenha = !verSenha;
+                            });
+                          },
+                          icon: Icon(
+                            verSenha ? Icons.visibility : Icons.visibility_off,
+                          ),
+                        ),
                       ),
+                      obscureText: !verSenha,
+                      keyboardType: TextInputType.visiblePassword,
+                      validator: (value) {
+                        final valor = value ?? "";
+                        if (_controllerPassword.text != valor) {
+                          return "As senhas informadas não conferem";
+                        }
+                        return null;
+                      },
                     ),
                   ),
-                  obscureText: !verSenha,
-                  keyboardType: TextInputType.visiblePassword,
-                  validator: (value) {
-                    final valor = value ?? "";
-                    if (_controllerPassword.text != valor) {
-                      return "As senhas informadas não conferem";
-                    }
-                    return null;
-                  },
                 ),
+              ),
               const SizedBox(
                 height: 20,
               ),
