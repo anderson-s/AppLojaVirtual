@@ -73,8 +73,17 @@ class ProductItem extends StatelessWidget {
           onTap: () {
             Navigator.pushNamed(context, "/detail", arguments: product);
           },
-          child: Image.network(
-            product.getImageUrl,
+          // child: Image.network(
+          //   product.getImageUrl,
+          //   fit: BoxFit.cover,
+          // ),
+          child: FadeInImage(
+            placeholder: const AssetImage(
+              "assets/images/product-placeholder.png",
+            ),
+            image: NetworkImage(
+              product.getImageUrl,
+            ),
             fit: BoxFit.cover,
           ),
         ),
