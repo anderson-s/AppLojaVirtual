@@ -21,15 +21,29 @@ class ProductDetail extends StatelessWidget {
                 product.getTitle,
                 textAlign: TextAlign.center,
               ),
-              background: Hero(
-                tag: product.getId,
-                child: AspectRatio(
-                  aspectRatio: 3.4,
-                  child: Image.network(
-                    product.imageUrl,
-                    // fit: BoxFit.fill,
+              background: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Hero(
+                    tag: product.getId,
+                    child: Image.network(
+                      product.imageUrl,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
+                  const DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment(0, 0.8),
+                        end: Alignment(0, 0),
+                        colors: [
+                          Color.fromRGBO(0, 0, 0, 0.6),
+                          Color.fromRGBO(0, 0, 0, 0)
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -60,7 +74,6 @@ class ProductDetail extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
-              
               ],
             ),
           ),
