@@ -20,7 +20,7 @@ class OrdersView extends StatelessWidget {
             Provider.of<ControllerOrder>(context, listen: false).loadOrder(),
         builder: (ctx, snapshot) {
           if (snapshot.error != null) {
-            return const Center(child: Text("Ocorreuu um erro!"));
+            return const Center(child: Text("Ocorreu um erro!"));
           }
           switch (snapshot.connectionState) {
             case ConnectionState.none:
