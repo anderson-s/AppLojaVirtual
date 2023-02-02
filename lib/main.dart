@@ -5,6 +5,7 @@ import 'package:app_loja_virtual/controller/controller_product.dart';
 import 'package:app_loja_virtual/models/utils/routes.dart';
 import 'package:app_loja_virtual/views/auth_or_home_view.dart';
 import 'package:app_loja_virtual/views/cart_view.dart';
+import 'package:app_loja_virtual/views/components/custom_route.dart';
 import 'package:app_loja_virtual/views/orders_view.dart';
 import 'package:app_loja_virtual/views/product_detail.dart';
 import 'package:app_loja_virtual/views/product_page_form.dart';
@@ -53,6 +54,11 @@ class MyWidget extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: tema.copyWith(
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: CustomPageTransitionsBuilder(),
+            },
+          ),
           colorScheme: tema.colorScheme.copyWith(
             primary: Colors.purple,
             secondary: Colors.deepOrange,
