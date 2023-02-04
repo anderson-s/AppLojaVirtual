@@ -1,7 +1,6 @@
 class Validations {
-  String? validator;
-
-  static validarNome(validator) {
+  String? validacao;
+  static validarNome(String validator) {
     if (validator.trim().isEmpty) {
       return "O nome é obrigatório!";
     } else if (validator.trim().length < 3) {
@@ -11,13 +10,13 @@ class Validations {
     }
   }
 
-  static validarPreco(validator) {
+  static validarPreco(String validator) {
     if (validator.trim().isEmpty) {
       return "O preço é obrigatório!";
     }
   }
 
-  static validarDescricao(validator) {
+  static validarDescricao(String validator) {
     if (validator.trim().isEmpty) {
       return "A descrição é obrigatória!";
     } else {
@@ -25,7 +24,7 @@ class Validations {
     }
   }
 
-  static validarUrl(validator) {
+  static validarUrl(String validator) {
     bool isValidUrl = Uri.tryParse(validator)?.hasAbsolutePath ?? false;
     bool endsWithFile = validator.toString().toLowerCase().endsWith(".png") ||
         validator.toString().toLowerCase().endsWith(".jpg") ||
@@ -39,23 +38,23 @@ class Validations {
     }
   }
 
-  static validarEmail(validator) {
-    if (validator.toString().isEmpty) {
+  static String? validarEmail(validacao) {
+    if (validacao.toString().isEmpty) {
       return "O email é obrigatório";
-    } else if (!validator.trim().toString().contains("@")){
-      return "Informe um email válido";
-    } else {
-      return;
     }
+    if (!validacao.trim().toString().contains("@")) {
+      return "Informe um email válido";
+    }
+    return null;
   }
 
-  static validarSenha(validator) {
-    if (validator.toString().isEmpty) {
+  static String? validarSenha(validacao) {
+    if (validacao.toString().isEmpty) {
       return "A senha é obrigatória";
-    } else if (validator.toString().length < 6) {
-      return "A senha deve ter pelo menos 6 caracteres";
-    } else {
-      return;
     }
+    if (validacao.toString().length < 6) {
+      return "A senha deve ter pelo menos 6 caracteres";
+    }
+    return null;
   }
 }

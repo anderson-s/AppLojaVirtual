@@ -19,7 +19,10 @@ class _ProductPageFormState extends State<ProductPageForm> {
   final urlFocus = FocusNode();
   final controllerUrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final _formData = <String, Object>{};
+  final _formData = <String, Object>{
+    "email": "",
+    "password": "",
+  };
   bool progresso = false;
   @override
   void initState() {
@@ -132,7 +135,8 @@ class _ProductPageFormState extends State<ProductPageForm> {
                         FocusScope.of(context).requestFocus(priceFocus);
                       },
                       onSaved: (name) => _formData["name"] = name ?? "",
-                      validator: (value) => Validations.validarNome(value),
+                      validator: (value) =>
+                          Validations.validarNome(value.toString()),
                     ),
                     TextFormField(
                       initialValue: _formData["price"]?.toString(),
@@ -148,7 +152,8 @@ class _ProductPageFormState extends State<ProductPageForm> {
                       },
                       onSaved: (price) => _formData["price"] =
                           double.tryParse(price.toString()) ?? 0.0,
-                      validator: (value) => Validations.validarPreco(value),
+                      validator: (value) =>
+                          Validations.validarPreco(value.toString()),
                     ),
                     TextFormField(
                       initialValue: _formData["description"]?.toString(),
@@ -161,7 +166,8 @@ class _ProductPageFormState extends State<ProductPageForm> {
                       },
                       onSaved: (description) =>
                           _formData["description"] = description ?? "",
-                      validator: (value) => Validations.validarDescricao(value),
+                      validator: (value) =>
+                          Validations.validarDescricao(value.toString()),
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -176,7 +182,8 @@ class _ProductPageFormState extends State<ProductPageForm> {
                             focusNode: urlFocus,
                             keyboardType: TextInputType.url,
                             onFieldSubmitted: (_) => submitForm(),
-                            validator: (value) => Validations.validarUrl(value),
+                            validator: (value) =>
+                                Validations.validarUrl(value.toString()),
                             onSaved: (urlImage) =>
                                 _formData["urlImage"] = urlImage ?? "",
                           ),

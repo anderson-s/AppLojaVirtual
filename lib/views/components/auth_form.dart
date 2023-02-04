@@ -18,8 +18,9 @@ class _AuthFormState extends State<AuthForm>
   AuthMode _authMode = AuthMode.login;
   bool verSenha = false;
   bool progresso = false;
+  bool valueCheck = false;
   final TextEditingController _controllerPassword = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final Map<String, String> _formData = {
     "email": "",
     "password": "",
@@ -73,26 +74,23 @@ class _AuthFormState extends State<AuthForm>
   }
 
   Future<void> _submit() async {
-    final isValid = formKey.currentState?.validate() ?? false;
-    if (!isValid == false) {
+    bool isValid = _formKey.currentState!.validate();
+    if (!isValid) {
       return;
-    } else {
-      setState(() {
-        progresso = true;
-      });
-      formKey.currentState?.save();
-      final auth = Provider.of<ControllerAuth>(context, listen: false);
-      try {
-        isLogin()
-            ? await auth.signin(_formData["email"]!, _formData["password"]!)
-            : await auth.signup(_formData["email"]!, _formData["password"]!);
-      } on ExceptionsAuth catch (error) {
-        popUpError(error.toString());
-      } catch (error) {
-        popUpError("Ocorreu um erro inesperado.");
-      } finally {
-        setState(() => progresso = false);
-      }
+    }
+    setState(() {
+      progresso = true;
+    });
+    _formKey.currentState?.save();
+    final auth = Provider.of<ControllerAuth>(context, listen: false);
+    try {
+      isLogin()
+          ? await auth.signin(_formData["email"]!, _formData["password"]!)
+          : await auth.signup(_formData["email"]!, _formData["password"]!);
+    } on ExceptionsAuth catch (error) {
+      popUpError(error.toString());
+    } finally {
+      setState(() => progresso = false);
     }
   }
 
@@ -150,7 +148,7 @@ class _AuthFormState extends State<AuthForm>
         padding: const EdgeInsets.all(16),
         width: deviceSize.width * 0.75,
         child: Form(
-          key: formKey,
+          key: _formKey,
           child: Column(
             children: [
               TextFormField(
@@ -162,8 +160,8 @@ class _AuthFormState extends State<AuthForm>
                   ),
                 ),
                 keyboardType: TextInputType.emailAddress,
-                onSaved: (email) => _formData["email"] = email ?? "",
-                validator: (email) => Validations.validarEmail(email),
+                onSaved: (email) => _formData["email"] = email.toString(),
+                validator: Validations.validarEmail,
               ),
               TextFormField(
                 controller: _controllerPassword,
@@ -184,50 +182,57 @@ class _AuthFormState extends State<AuthForm>
                 ),
                 obscureText: (!isLogin()) ? true : !verSenha,
                 keyboardType: TextInputType.visiblePassword,
-                onSaved: (password) => _formData["password"] = password ?? "",
-                validator: (value) =>
-                    Validations.validarSenha(value.toString()),
+                onSaved: (password) =>
+                    _formData["password"] = password.toString(),
+                validator: Validations.validarSenha,
               ),
-              AnimatedContainer(
-                duration: const Duration(
-                  milliseconds: 300,
-                ),
-                constraints: BoxConstraints(
-                  minHeight: isLogin() ? 0 : 60,
-                  maxHeight: isLogin() ? 0 : 120,
-                ),
-                curve: Curves.linear,
-                child: FadeTransition(
-                  opacity: _opacityAnimation!,
-                  child: SlideTransition(
-                    position: _slideAnimation!,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "Confirmar Senha",
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              verSenha = !verSenha;
-                            });
-                          },
-                          icon: Icon(
-                            verSenha ? Icons.visibility : Icons.visibility_off,
+              if (!isLogin())
+                AnimatedContainer(
+                  duration: const Duration(
+                    milliseconds: 300,
+                  ),
+                  constraints: BoxConstraints(
+                    minHeight: isLogin() ? 0 : 60,
+                    maxHeight: isLogin() ? 0 : 120,
+                  ),
+                  curve: Curves.linear,
+                  child: FadeTransition(
+                    opacity: _opacityAnimation!,
+                    child: SlideTransition(
+                      position: _slideAnimation!,
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: "Confirmar Senha",
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                verSenha = !verSenha;
+                              });
+                            },
+                            icon: Icon(
+                              verSenha
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
                           ),
                         ),
+                        obscureText: !verSenha,
+                        keyboardType: TextInputType.visiblePassword,
+                        validator: (value) {
+                          final valor = value ?? "";
+                          if (_controllerPassword.text != valor) {
+                            return "As senhas informadas não conferem";
+                          }
+                          return null;
+                        },
                       ),
-                      obscureText: !verSenha,
-                      keyboardType: TextInputType.visiblePassword,
-                      validator: (value) {
-                        final valor = value ?? "";
-                        if (_controllerPassword.text != valor) {
-                          return "As senhas informadas não conferem";
-                        }
-                        return null;
-                      },
                     ),
                   ),
                 ),
+              const SizedBox(
+                height: 20,
               ),
+              const Text("Esqueceu a senha?"),
               const SizedBox(
                 height: 20,
               ),
