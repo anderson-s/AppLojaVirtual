@@ -186,49 +186,49 @@ class _AuthFormState extends State<AuthForm>
                     _formData["password"] = password.toString(),
                 validator: Validations.validarSenha,
               ),
-              if (!isLogin())
-                AnimatedContainer(
-                  duration: const Duration(
-                    milliseconds: 300,
-                  ),
-                  constraints: BoxConstraints(
-                    minHeight: isLogin() ? 0 : 60,
-                    maxHeight: isLogin() ? 0 : 120,
-                  ),
-                  curve: Curves.linear,
-                  child: FadeTransition(
-                    opacity: _opacityAnimation!,
-                    child: SlideTransition(
-                      position: _slideAnimation!,
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "Confirmar Senha",
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                verSenha = !verSenha;
-                              });
-                            },
-                            icon: Icon(
-                              verSenha
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                            ),
+              AnimatedContainer(
+                duration: const Duration(
+                  milliseconds: 300,
+                ),
+                constraints: BoxConstraints(
+                  minHeight: isLogin() ? 0 : 60,
+                  maxHeight: isLogin() ? 0 : 120,
+                ),
+                curve: Curves.linear,
+                child: FadeTransition(
+                  opacity: _opacityAnimation!,
+                  child: SlideTransition(
+                    position: _slideAnimation!,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Confirmar Senha",
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              verSenha = !verSenha;
+                            });
+                          },
+                          icon: Icon(
+                            verSenha ? Icons.visibility : Icons.visibility_off,
                           ),
                         ),
-                        obscureText: !verSenha,
-                        keyboardType: TextInputType.visiblePassword,
-                        validator: (value) {
+                      ),
+                      obscureText: !verSenha,
+                      keyboardType: TextInputType.visiblePassword,
+                      validator: (value) {
+                        if (!isLogin()) {
                           final valor = value ?? "";
                           if (_controllerPassword.text != valor) {
                             return "As senhas informadas não conferem";
                           }
                           return null;
-                        },
-                      ),
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ),
+              ),
               const SizedBox(
                 height: 20,
               ),
